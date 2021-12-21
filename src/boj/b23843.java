@@ -29,7 +29,8 @@ public class b23843 {
         else {
             int result=1;
             while(result!=n) {
-                result = (int)Math.pow(result,2);
+                if((int)Math.pow(2,result)==n)
+                    break;
                 result++;
             }
             return result;
