@@ -22,10 +22,11 @@ public class b1926 {
         n = Integer.parseInt(str.split(" ")[0]);
         m = Integer.parseInt(str.split(" ")[1]);
         paper = new int[n][m];
+        visited = new boolean[n][m];
         for (int i = 0; i < n; i++) {
+            str = br.readLine();
             for (int j = 0; j < m; j++) {
-                str = br.readLine();
-                paper[n][m] = Integer.parseInt(str.split(" ")[m]);
+                paper[i][j] = Integer.parseInt(str.split(" ")[j]);
             }
         }
 
@@ -46,6 +47,7 @@ public class b1926 {
 
                             if(-1 < newX && newX < n && -1 < newY && newY < m) {
                                 if(paper[newX][newY]==1) {
+                                    visited[newX][newY]=true;
                                     queue.offer(new location(newX,newY,paper[newX][newY]));
                                     nowArea++;
                                 }
