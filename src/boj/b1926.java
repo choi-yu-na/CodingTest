@@ -36,9 +36,10 @@ public class b1926 {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if(paper[i][j]==1 && visited[i][j]==false) {
-                    queue.offer(new location(i,j,paper[i][j]));
+                    queue.offer(new location(i,j));
+                    visited[i][j]=true;
                     numOfPaint++;
-                    nowArea=0;
+                    nowArea=1;
                     while(!queue.isEmpty()) {
                         location l = queue.poll();
                         for(int k=0; k<4; k++) {
@@ -46,14 +47,15 @@ public class b1926 {
                             int newY = l.y+dy[k];
 
                             if(-1 < newX && newX < n && -1 < newY && newY < m) {
-                                if(paper[newX][newY]==1) {
+                                if(paper[newX][newY]==1 && visited[newX][newY]==false) {
                                     visited[newX][newY]=true;
-                                    queue.offer(new location(newX,newY,paper[newX][newY]));
                                     nowArea++;
+                                    queue.offer(new location(newX,newY));
                                 }
                             }
                         }
                     }
+                    System.out.println(nowArea);
                     max = Math.max(max,nowArea);
                 }
             }
@@ -66,12 +68,10 @@ public class b1926 {
     public static class location {
         int x;
         int y;
-        int value;
 
-        public location(int x, int y, int value) {
+        public location(int x, int y) {
             this.x = x;
             this.y = y;
-            this.value = value;
         }
     }
 }
