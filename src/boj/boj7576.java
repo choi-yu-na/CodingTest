@@ -42,7 +42,9 @@ public class boj7576 {
                     }
                 }
             }
-            if(loopCnt>=(n*m)/2) {
+            print(storage);
+            day++;
+            if(day>=(n*m)/2) {
                 System.out.println("-1");
                 return;
             }
@@ -59,7 +61,7 @@ public class boj7576 {
             if(-1<newX && newX<n && -1<newY && newY<m) {
                 if(storage[newX][newY]==0 && visited[newX][newY]==false) {
                     storage[newX][newY]=1;
-                    visited[newX][newY]=true;
+                    //visited[newX][newY]=true;
                 }
             }
         }
@@ -74,6 +76,16 @@ public class boj7576 {
             }
         }
         return true;
+    }
+
+    public static void print(int[][] arr) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                System.out.print(arr[i][j]+" ");
+            }
+            System.out.println();
+        }
+        System.out.println("----------");
     }
 
     public static class location {
