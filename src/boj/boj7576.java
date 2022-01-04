@@ -7,75 +7,60 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class boj7576 {
     static int n, m;
     static int[][] storage;
+    static int tomato;
     static boolean[][] visited;
     static Queue<location> queue;
     static int[] dx = {1,-1,0,0};
     static int[] dy = {0,0,1,-1};
-    static int day;
+    static int max;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String str = br.readLine();
-        m = Integer.parseInt(str.split(" ")[0]);
-        n = Integer.parseInt(str.split(" ")[1]);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        m = Integer.parseInt(st.nextToken());
+        n = Integer.parseInt(st.nextToken());
         storage = new int[n][m];
-        visited = new boolean[n][m];
+        queue = new LinkedList<>();
         for (int i = 0; i < n; i++) {
-            str = br.readLine();
+            st = new StringTokenizer(br.readLine());
             for (int j = 0; j < m; j++) {
-                storage[i][j] = Integer.parseInt(str.split(" ")[j]);
+                storage[i][j] = Integer.parseInt(st.nextToken());
+                if(storage[i][j]==1) queue.offer(new location(i,j,0));
+                else if(storage[i][j]==0) tomato += 1;
             }
         }
 
-        int loopCnt = 0;
-        queue = new LinkedList<>();
-        while(!isDone(storage)) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
-                    if(storage[i][j]==1 && visited[i][j]==false) {
-                        visited[i][j]=true;
-                        queue.offer(new location(i,j));
-                        ripe(i,j);
-                    }
-                }
+        ripe();
+
+        System.out.println(tomato>0?-1:max);
+    }
+
+    public static void ripe() {
+        visited = new boolean[n][m];
+        while(!queue.isEmpty()) {
+            location now = queue.poll();
+            if(max < now.day) max = now.day;
+            for (int i = 0; i < 4; i++) {
+                int newX = now.x + dx[i];
+                int newY = now.y + dy[i];
+
+                if (0 > newX || newX >= n || 0 > newY || newY >= m) continue;
+                if (storage[newX][newY] == -1) continue;
+                if (visited[newX][newY]) continue;
+
+                queue.offer(new location(newX,newY, now.day+1));
+                storage[newX][newY]=1;
+                visited[newX][newY]=true;
+                tomato -= 1;
             }
             print(storage);
-            day++;
-            if(day>=(n*m)/2) {
-                System.out.println("-1");
-                return;
-            }
+
         }
-        System.out.println(day);
-
-    }
-
-    public static void ripe(int x, int y) {
-        location l = queue.poll();
-        for (int i = 0; i < 4; i++) {
-            int newX = l.x+dx[i];
-            int newY = l.y+dy[i];
-            if(-1<newX && newX<n && -1<newY && newY<m) {
-                if(storage[newX][newY]==0 && visited[newX][newY]==false) {
-                    storage[newX][newY]=1;
-                    //visited[newX][newY]=true;
-                }
-            }
-        }
-
-    }
-
-    public static boolean isDone(int[][] arr) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if(arr[i][j]==0)
-                    return false;
-            }
-        }
-        return true;
     }
 
     public static void print(int[][] arr) {
@@ -91,10 +76,12 @@ public class boj7576 {
     public static class location {
         int x;
         int y;
+        int day;
 
-        public location(int x, int y) {
+        public location(int x, int y, int day) {
             this.x = x;
             this.y = y;
+            this.day = day;
         }
     }
 }
